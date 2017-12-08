@@ -1,10 +1,12 @@
 const { Joi } = require('celebrate');
 
+const id = Joi.string().length(24).required();
+
 const params = Joi.object().keys({
-  id: Joi.string().length(24).required(),
+  id,
 });
 
-const createUserSchema = {
+const create = {
   body: Joi.object().keys({
     firstName: Joi.string().min(1).required(),
     lastName: Joi.string().min(1).required(),
@@ -12,7 +14,7 @@ const createUserSchema = {
   }),
 };
 
-const updateUserSchema = {
+const update = {
   body: Joi.object().keys({
     firstName: Joi.string().min(1).optional(),
     lastName: Joi.string().min(1).optional(),
@@ -21,12 +23,28 @@ const updateUserSchema = {
   params,
 };
 
-const getOrDeleteUserSchema = {
+const idParam = {
   params,
 };
 
+const addFriend = {
+  body: Joi.object().keys({
+    friend: id,
+  }),
+  params,
+};
+
+const deleteFriend = {
+  params: Joi.object().keys({
+    friendId: id,
+    id,
+  }),
+};
+
 module.exports = {
-  createUserSchema,
-  updateUserSchema,
-  getOrDeleteUserSchema,
+  create,
+  update,
+  idParam,
+  addFriend,
+  deleteFriend,
 };

@@ -1,12 +1,12 @@
 const express = require('express');
 const { User } = require('../models');
-const { createUserSchema, updateUserSchema, getOrDeleteUserSchema } = require('../schemas');
+const schemas = require('../schemas').user;
 const { celebrate } = require('celebrate');
 const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/:id', celebrate(getOrDeleteUserSchema), async (req, res) => {
+router.get('/:id', celebrate(schemas.idParam), async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id }, '_id firstName lastName birthday friends locations');
     res.status(200).send(user);
@@ -15,7 +15,7 @@ router.get('/:id', celebrate(getOrDeleteUserSchema), async (req, res) => {
   }
 });
 
-router.post('/', celebrate(createUserSchema), async (req, res) => {
+router.post('/', celebrate(schemas.create), async (req, res) => {
   try {
     const rawUser = await User.create(req.body);
     const user = _.pick(rawUser, ['_id', 'firstName', 'lastName', 'birthday', 'friends', 'locations']);
@@ -25,7 +25,7 @@ router.post('/', celebrate(createUserSchema), async (req, res) => {
   }
 });
 
-router.put('/:id', celebrate(updateUserSchema), async (req, res) => {
+router.put('/:id', celebrate(schemas.update), async (req, res) => {
   try {
     await User.update({ _id: req.params.id }, { $set: req.body });
     res.sendStatus(204);
@@ -34,7 +34,7 @@ router.put('/:id', celebrate(updateUserSchema), async (req, res) => {
   }
 });
 
-router.delete('/:id', celebrate(getOrDeleteUserSchema), async (req, res) => {
+router.delete('/:id', celebrate(schemas.idParam), async (req, res) => {
   try {
     await User.remove({ _id: req.params.id });
     res.sendStatus(204);
@@ -43,7 +43,7 @@ router.delete('/:id', celebrate(getOrDeleteUserSchema), async (req, res) => {
   }
 });
 
-router.post('/:id/friends', async (req, res) => {
+router.post('/:id/friends', celebrate(schemas.addFriend), async (req, res) => {
   try {
     const { friend } = req.body;
     await User.update({ _id: req.params.id }, { $addToSet: { friends: friend } });
@@ -63,15 +63,14 @@ router.delete('/:id/friends/:friendId', async (req, res) => {
   }
 });
 
-router.get('/:id/friends/', async (req, res) => {
+router.get('/:id/friends/', celebrate(schemas.idParam), async (req, res) => {
   try {
-    const select = '_id firstName lastName birthday friends locations';
+    const select = '_id firstName lastName locations';
     const { friends } = await User.findOne({ _id: req.params.id }, 'friends').populate('friends', select);
     res.status(200).send(friends);
   } catch (err) {
     res.sendStatus(500);
   }
 });
-
 
 module.exports = router;
