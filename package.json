@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint index.js src/**/*.js",
+    "lint": "eslint src/**/*.js",
     "start": "node src/index.js"
   },
   "pre-commit": [
@@ -21,7 +21,10 @@
   },
   "homepage": "https://github.com/jscheffner/backpacker-backend#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "celebrate": "^7.0.3",
     "express": "^4.16.2",
+    "lodash": "^4.17.4",
     "mongoose": "^4.13.6"
   },
   "devDependencies": {
