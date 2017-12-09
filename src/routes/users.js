@@ -6,6 +6,15 @@ const _ = require('lodash');
 
 const router = express.Router();
 
+router.get('', async (req, res) => {
+  try {
+    const user = await User.find({}, '_id firstName lastName birthday friends locations');
+    res.status(200).send(user);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 router.get('/:id', celebrate(schemas.idParam), async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id }, '_id firstName lastName birthday friends locations');

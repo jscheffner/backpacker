@@ -6,6 +6,37 @@
   servers:
     - url: http://localhost:3000/api/v0
   paths:
+    /users:
+      get:
+        description: Get all users
+        tags:
+          - user
+        responses:
+          200:
+            description: all users
+          500:
+            description: Server Error
+      post:
+        description: Creates new user
+        tags:
+          - user
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+                required:
+                  - firstName
+                  - lastName
+                  - birthday
+        responses:
+          201:
+            description: 'Created User'
+          400:
+            description: 'Bad Request'
+          500:
+            description: 'Server Error'
     /users/{userId}:
       parameters:
         - in: path
@@ -53,30 +84,6 @@
             description: Bad Request
           500:
             description: Server Error
-    /users:
-      post:
-        description: Creates new user
-        tags:
-          - user
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-                required:
-                  - firstName
-                  - lastName
-                  - birthday
-        responses:
-          201:
-            description: 'Created User'
-          400:
-            description: 'Bad Request'
-          500:
-            description: 'Server Error'
-
-                
     /users/{userId}/friends:
       parameters:
         - in: path
