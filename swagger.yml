@@ -185,6 +185,8 @@
                   - user
                   - googleId
                   - coordinates
+                  - city
+                  - country
         responses:
           201:
             description: Created location
@@ -246,7 +248,7 @@
       Friend:
         type: object
         properties:
-          friendId:
+          friend:
             type: string
             minLength: 24
             maxLength: 24
@@ -269,6 +271,10 @@
               type: string
               minItems: 2
               maxItems: 2
+          city:
+            type: string
+          country:
+            type: string
       ObjectId:
         type: string
         minLength: 24

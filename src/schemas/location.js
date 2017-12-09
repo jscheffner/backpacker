@@ -16,6 +16,8 @@ const create = {
     favorite: Joi.boolean().optional(),
     googleId: Joi.string().required(),
     coordinates: Joi.array().items(Joi.number()).length(2).required(),
+    city: Joi.string().required(),
+    country: Joi.string().required(),
   }),
 };
 

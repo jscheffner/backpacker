@@ -24,6 +24,14 @@ const locationSchema = new Schema({
     type: [Number],
     required: true,
   },
+  city: {
+    type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required: true,
+  },
   images: [Schema.Types.ObjectId],
 });
 

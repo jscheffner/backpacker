@@ -45,7 +45,10 @@ router.put('/:id', celebrate(schemas.update), async (req, res) => {
 
 router.delete('/:id', celebrate(schemas.idParam), async (req, res) => {
   try {
-    await User.remove({ _id: req.params.id });
+    await Promise.all([
+      User.update({}, { $pull: { friends: req.params.id } }),
+      User.remove({ _id: req.params.id }),
+    ]);
     res.sendStatus(204);
   } catch (err) {
     res.sendStatus(500);
