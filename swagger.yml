@@ -145,6 +145,44 @@
             description: Bad Request
           500:
             description: Server Error
+    /users/{userId}/avatar:
+      parameters:
+        - in: path
+          name: userId
+          description: user id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'      
+      put:
+        description: Upload avatar
+        tags:
+          - user
+        requestBody:
+          content:
+            multipart/form-data:
+              schema:
+                properties:
+                  avatar:
+                    type: string
+                    format: binary
+        responses:
+          202:
+            description: Avatar uploaded
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+      delete:
+        description: Remove Avatar
+        tags:
+          - user
+        responses:
+          204:
+            description: Avatar removed
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
     /locations:
       get:
         description: Get the locations of the users specified as query parameters
@@ -245,6 +283,7 @@
             minLength: 1
           birthday:
             type: string
+            format: date
       Friend:
         type: object
         properties:

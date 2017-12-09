@@ -17,6 +17,7 @@ const userSchema = new Schema({
   },
   locations: [{ type: Schema.Types.ObjectId, ref: 'Location' }],
   friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  avatar: String,
 });
 
 module.exports = mongoose.model('User', userSchema);
