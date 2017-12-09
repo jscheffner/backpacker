@@ -1,0 +1,260 @@
+---
+  openapi: 3.0.0
+  info:
+    version: 0.1.0
+    title: Backpacker API
+  servers:
+    - url: http://localhost:3000/api/v0
+  paths:
+    /users/{userId}:
+      parameters:
+        - in: path
+          name: userId
+          description: user id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      get:
+        description: Returns the requested user
+        tags:
+          - user
+        responses:
+          200:
+            description: The user information
+          400:
+            description: Bade Request
+          500:
+            description: Server Error
+      put:
+        description: Update user
+        tags:
+          - user
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        responses:
+          204:
+            description: The user was successfully updated
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+      delete:
+        description: Delete user
+        tags:
+          - user
+        responses:
+          204:
+            description: The user was successfully deleted
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+    /users:
+      post:
+        description: Creates new user
+        tags:
+          - user
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+                required:
+                  - firstName
+                  - lastName
+                  - birthday
+        responses:
+          201:
+            description: 'Created User'
+          400:
+            description: 'Bad Request'
+          500:
+            description: 'Server Error'
+
+                
+    /users/{userId}/friends:
+      parameters:
+        - in: path
+          name: userId
+          description: user id or "me" for currently logged in user
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      get:
+        description: Returns all friends of a user
+        tags:
+          - user
+        responses:
+          200:
+            description: The user's friends
+          400:
+            description: 'Bad Request'
+          500:
+            description: 'Server Error'
+      put:
+        description: Add a friend
+        tags:
+          - user
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Friend'
+        responses:
+          204:
+            description: Friend added successfully
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+    /users/{userId}/friends/{friendId}:
+      parameters:
+        - in: path
+          name: userId
+          description: user id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+        - in: path
+          name: friendId
+          description: friend's user id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      delete:
+        description: Remove a friend
+        tags:
+          - user
+        responses:
+          204:
+            description: Friend sucessfully removed
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+    /locations:
+      get:
+        description: Get the locations of the users specified as query parameters
+        tags:
+          - location
+        parameters:
+          - in: query
+            name: users
+            description: the users that added the location
+            required: true
+            schema:
+              type: array
+              items:
+                type: string
+          - in: query
+            name: googleId
+            description: google id of the location
+            required: false
+            schema:
+              type: string
+        responses:
+          200:
+            description: Locations
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+      post:
+        description: Add new location
+        tags:
+          - location
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+                required:
+                  - user
+                  - googleId
+                  - coordinates
+        responses:
+          201:
+            description: Created location
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+              
+                
+    /locations/{id}:
+      parameters:
+        - in: path
+          name: locationId
+          description: location id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      put:
+        description: Update lcoation
+        tags:
+          - location
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        responses:
+          204:
+            description: Location ipdated
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+  components:
+    schemas:
+      User:
+        type: object
+        properties:
+          firstName:
+            type: string
+            minLength: 1
+          lastName:
+            type: string
+            minLength: 1
+          birthday:
+            type: string
+      Friend:
+        type: object
+        properties:
+          friendId:
+            type: string
+            minLength: 24
+            maxLength: 24
+      Location:
+        type: object
+        properties:
+          user:
+            type: string
+            minLength: 24
+            maxLength: 24
+          googleId:
+            type: string
+          favorite:
+            type: boolean
+          description:
+            type: string
+          coordinates:
+            type: array
+            items: 
+              type: string
+              minItems: 2
+              maxItems: 2
+      ObjectId:
+        type: string
+        minLength: 24
+        maxLength: 24
+  tags:
+    - name: user
+    - name: location

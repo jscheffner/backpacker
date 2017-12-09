@@ -23,7 +23,7 @@ router.get('/', celebrate(schemas.find), async (req, res) => {
 router.post('/', celebrate(schemas.create), async (req, res) => {
   try {
     const location = await Location.create(req.body);
-    res.status(200).send(location);
+    res.status(201).send(location);
   } catch (err) {
     res.sendStatus(500);
   }

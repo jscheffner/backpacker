@@ -18,7 +18,7 @@ router.get('/:id', celebrate(schemas.idParam), async (req, res) => {
 router.post('/', celebrate(schemas.create), async (req, res) => {
   try {
     const rawUser = await User.create(req.body);
-    const user = _.pick(rawUser, ['_id', 'firstName', 'lastName', 'birthday', 'friends', 'locations']);
+    const user = _.pick(rawUser, ['_id', 'firstName', 'lastName', 'birthday']);
     res.status(201).send(user);
   } catch (err) {
     res.sendStatus(500);
@@ -43,11 +43,11 @@ router.delete('/:id', celebrate(schemas.idParam), async (req, res) => {
   }
 });
 
-router.post('/:id/friends', celebrate(schemas.addFriend), async (req, res) => {
+router.put('/:id/friends', celebrate(schemas.addFriend), async (req, res) => {
   try {
     const { friend } = req.body;
     await User.update({ _id: req.params.id }, { $addToSet: { friends: friend } });
-    res.sendStatus(201);
+    res.sendStatus(204);
   } catch (err) {
     res.sendStatus(500);
   }
