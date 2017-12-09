@@ -197,7 +197,7 @@
     /locations/{id}:
       parameters:
         - in: path
-          name: locationId
+          name: id
           description: location id
           required: true
           schema:
@@ -214,7 +214,18 @@
                 $ref: '#/components/schemas/Location'
         responses:
           204:
-            description: Location ipdated
+            description: Location updated
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+      delete:
+        description: Delete Location
+        tags:
+          - location
+        responses:
+          204:
+            description: User removed
           400:
             description: Bad Request
           500:

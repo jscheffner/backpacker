@@ -31,8 +31,15 @@ const update = {
   }),
 };
 
+const remove = {
+  params: Joi.object().keys({
+    id,
+  }),
+};
+
 module.exports = {
   find,
   create,
   update,
+  remove,
 };
