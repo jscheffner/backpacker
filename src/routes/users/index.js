@@ -57,7 +57,7 @@ router.delete('/:id', celebrate(schemas.idParam), async (req, res) => {
   }
 });
 
-router.use('/:id/friends', friends);
-router.use('/:id/avatar', avatar);
+router.use('/:id/friends', celebrate(schemas.idParam), friends);
+router.use('/:id/avatar', celebrate(schemas.idParam), avatar);
 
 module.exports = router;

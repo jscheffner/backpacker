@@ -5,7 +5,7 @@ const { celebrate } = require('celebrate');
 
 const router = express.Router({ mergeParams: true });
 
-router.put('/', celebrate(schemas.addFriend), async (req, res) => {
+router.put('/', celebrate(schemas.friendIdBody), async (req, res) => {
   try {
     const { friend } = req.body;
     await User.update({ _id: req.params.id }, { $addToSet: { friends: friend } });
@@ -15,7 +15,7 @@ router.put('/', celebrate(schemas.addFriend), async (req, res) => {
   }
 });
 
-router.delete('/:friendId', async (req, res) => {
+router.delete('/:friendId', celebrate(schemas.friendIdParam), async (req, res) => {
   try {
     const { id, friendId } = req.params;
     await Promise.all([
@@ -28,7 +28,7 @@ router.delete('/:friendId', async (req, res) => {
   }
 });
 
-router.get('/', celebrate(schemas.idParam), async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const select = '_id firstName lastName avatar locations';
     const { friends } = await User.findOne({ _id: req.params.id }, 'friends').populate('friends', select);

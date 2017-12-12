@@ -27,14 +27,13 @@ const idParam = {
   params,
 };
 
-const addFriend = {
+const friendIdBody = {
   body: Joi.object().keys({
     friend: id,
   }),
-  params,
 };
 
-const deleteFriend = {
+const friendIdParam = {
   params: Joi.object().keys({
     friendId: id,
     id,
@@ -45,6 +44,6 @@ module.exports = {
   create,
   update,
   idParam,
-  addFriend,
-  deleteFriend,
+  friendIdBody,
+  friendIdParam,
 };

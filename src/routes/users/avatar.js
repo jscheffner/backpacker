@@ -1,13 +1,11 @@
 const express = require('express');
 const { User } = require('../../models');
-const schemas = require('../../schemas').user;
-const { celebrate } = require('celebrate');
 const { IncomingForm } = require('formidable');
 const fs = require('fs-extra');
 
 const router = express.Router({ mergeParams: true });
 
-router.put('/', celebrate(schemas.idParam), async (req, res) => {
+router.put('/', async (req, res) => {
   const form = new IncomingForm();
   form.parse(req);
 
@@ -32,7 +30,7 @@ router.put('/', celebrate(schemas.idParam), async (req, res) => {
   });
 });
 
-router.delete('/', celebrate(schemas.idParam), async (req, res) => {
+router.delete('/', async (req, res) => {
   try {
     await fs.remove(`uploads/imgs/user/${req.params.id}.jpg`);
     await User.update({ _id: req.params.id }, { $unset: { avatar: 1 } });
