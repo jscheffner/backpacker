@@ -1,20 +1,18 @@
 # backpacker-backend
 
-## Usage
-
-### Prerequisites
+## Prerequisites
 
 Before running this service you need to install:
 - Node.js
 - NPM
 - MongoDB
 
-### Installation
+## Installation
 
 1. Clone this repository with `git clone git@github.com:jscheffner/backpacker-backend.git`
 2. Run `npm install` inside the newly created directory
 
-### Run
+## Run
 
 1. Make sure your lokal MongoDB is running
 2. Run `npm start`

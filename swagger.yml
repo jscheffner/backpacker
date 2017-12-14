@@ -270,6 +270,60 @@
             description: Bad Request
           500:
             description: Server Error
+    /locations/{id}/images:
+      parameters:
+        - in: path
+          name: id
+          description: location id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      post:
+        description: Upload location images
+        tags:
+          - location
+        requestBody:
+          content:
+            multipart/form-data:
+              schema:
+                properties:
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: binary
+        responses:
+          202:
+            description: Image uploaded
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
+    /location/{locationId}/images/{imageId}:
+      parameters:
+        - in: path
+          name: locationId
+          description: location id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+        - in: path
+          name: imageId
+          description: image id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+      delete:
+        description: Delete Image
+        tags:
+          - location
+        responses:
+          204:
+            description: Image deleted
+          400:
+            description: Bad Request
+          500:
+            description: Server Error
   components:
     schemas:
       User:

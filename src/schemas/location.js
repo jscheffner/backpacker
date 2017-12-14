@@ -39,9 +39,16 @@ const remove = {
   }),
 };
 
+const idParam = {
+  params: Joi.object().keys({
+    id,
+  }),
+};
+
 module.exports = {
   find,
   create,
   update,
   remove,
+  idParam,
 };

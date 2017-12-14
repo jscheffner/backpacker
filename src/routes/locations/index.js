@@ -1,7 +1,8 @@
 const express = require('express');
-const { Location, User } = require('../models');
+const { Location, User } = require('../..//models');
 const { celebrate } = require('celebrate');
-const schemas = require('../schemas').location;
+const schemas = require('../../schemas').location;
+const images = require('./images');
 
 const router = express.Router();
 
@@ -52,5 +53,7 @@ router.delete('/:id', celebrate(schemas.remove), async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+router.use('/:id/images', celebrate(schemas.idParam), images);
 
 module.exports = router;
