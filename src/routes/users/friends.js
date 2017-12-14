@@ -5,10 +5,10 @@ const { celebrate } = require('celebrate');
 
 const router = express.Router({ mergeParams: true });
 
-router.put('/', celebrate(schemas.friendIdBody), async (req, res) => {
+router.put('/:friendId', celebrate(schemas.friendIdParam), async (req, res) => {
   try {
-    const { friend } = req.body;
-    await User.update({ _id: req.params.id }, { $addToSet: { friends: friend } });
+    const { friendId, id } = req.params;
+    await User.update({ _id: id }, { $addToSet: { friends: friendId } });
     res.sendStatus(204);
   } catch (err) {
     res.sendStatus(500);
