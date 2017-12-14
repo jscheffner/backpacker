@@ -31,7 +31,8 @@ router.delete('/:friendId', celebrate(schemas.friendIdParam), async (req, res) =
 router.get('/', async (req, res) => {
   try {
     const select = '_id firstName lastName avatar locations';
-    const { friends } = await User.findOne({ _id: req.params.id }, 'friends').populate('friends', select);
+    const { friends } = await User.findOne({ _id: req.params.id }, 'friends')
+      .populate({ path: 'friends', select, populate: { path: 'locations', select: '-__v' } });
     res.status(200).send(friends);
   } catch (err) {
     res.sendStatus(500);

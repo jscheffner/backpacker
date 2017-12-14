@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const locationSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -33,6 +37,7 @@ const locationSchema = new Schema({
     required: true,
   },
   images: [Schema.Types.ObjectId],
+  categories: [String],
 });
 
 module.exports = mongoose.model('Location', locationSchema);

@@ -11,6 +11,7 @@ const find = {
 
 const create = {
   body: Joi.object().keys({
+    name: Joi.string().required(),
     user: id,
     description: Joi.string().optional(),
     favorite: Joi.boolean().optional(),
@@ -18,6 +19,7 @@ const create = {
     coordinates: Joi.array().items(Joi.number()).length(2).required(),
     city: Joi.string().required(),
     country: Joi.string().required(),
+    categories: Joi.array().items(Joi.string()).optional(),
   }),
 };
 
@@ -30,6 +32,7 @@ const update = {
     favorite: Joi.boolean().optional(),
     googleId: Joi.string().required(),
     coordinates: Joi.array().items(Joi.number()).length(2).optional(),
+    categories: Joi.array().items(Joi.string()).optional(),
   }),
 };
 
