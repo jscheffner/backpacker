@@ -10,7 +10,7 @@ const create = {
   body: Joi.object().keys({
     firstName: Joi.string().min(1).required(),
     lastName: Joi.string().min(1).required(),
-    birthday: Joi.date().required(),
+    avatar: Joi.string().optional(),
   }),
 };
 
