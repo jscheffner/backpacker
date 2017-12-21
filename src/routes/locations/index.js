@@ -31,7 +31,7 @@ router.post('/', celebrate(schemas.create), async (req, res) => {
   }
 });
 
-router.put('/:id', celebrate(schemas.update), async (req, res) => {
+router.patch('/:id', celebrate(schemas.update), async (req, res) => {
   try {
     await Location.update({ _id: req.params.id }, req.body);
     res.sendStatus(204);

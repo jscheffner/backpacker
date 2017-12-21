@@ -56,7 +56,7 @@
             description: Bade Request
           500:
             description: Server Error
-      put:
+      patch:
         description: Update user
         tags:
           - user
@@ -236,8 +236,8 @@
           required: true
           schema:
             $ref: '#/components/schemas/ObjectId'
-      put:
-        description: Update lcoation
+      patch:
+        description: Update location
         tags:
           - location
         requestBody:

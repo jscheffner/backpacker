@@ -36,7 +36,7 @@ router.post('/', celebrate(schemas.create), async (req, res) => {
   }
 });
 
-router.put('/:id', celebrate(schemas.update), async (req, res) => {
+router.patch('/:id', celebrate(schemas.update), async (req, res) => {
   try {
     await User.update({ _id: req.params.id }, { $set: req.body });
     res.sendStatus(204);
