@@ -32,9 +32,8 @@ router.post('/', (req, res) => {
   form.on('end', async () => {
     try {
       res.sendStatus(202);
-      await saveFiles(form.openedFiles);
+      await saveFiles(form.openedFiles, req.params.id);
     } catch (error) {
-      res.sendStatus(500);
       console.log(error);
     }
   });
