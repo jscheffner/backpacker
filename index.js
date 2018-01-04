@@ -11,7 +11,7 @@ mongoose.connect('mongodb://localhost/backpacker', { useMongoClient: true });
 mongoose.Promise = Promise;
 
 const credentials = {
-  clientID: '590779633384-cdoo51p2imhpuv04nautn8l3v49vnao5.apps.googleusercontent.com',
+  clientID: '281227624759-l6dd68h5j2jlcn8scgh4g0kcn42f107l.apps.googleusercontent.com',
   clientSecret: '',
 };
 
