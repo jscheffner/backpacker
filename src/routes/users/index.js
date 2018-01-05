@@ -4,7 +4,7 @@ const schemas = require('../../schemas').user;
 const { celebrate } = require('celebrate');
 const _ = require('lodash');
 const friends = require('./friends');
-const avatar = require('./friends');
+const avatar = require('./avatar');
 
 const router = express.Router();
 
