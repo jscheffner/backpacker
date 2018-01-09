@@ -26,16 +26,6 @@ router.get('/:id', celebrate(schemas.idParam), async (req, res) => {
   }
 });
 
-// router.post('/', celebrate(schemas.create), async (req, res) => {
-//   try {
-//     const rawUser = await User.create(req.body);
-//     const user = _.pick(rawUser, ['_id', 'firstName', 'lastName', 'birthday']);
-//     res.status(201).send(user);
-//   } catch (err) {
-//     res.sendStatus(500);
-//   }
-// });
-
 router.post('/', passport.authenticate('authenticate'), (req, res) => (req.user ? res.status(201).send(req.user) : res.sendStatus(500)));
 
 router.put('/:id', celebrate(schemas.update), async (req, res) => {

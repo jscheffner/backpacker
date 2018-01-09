@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const passport = require('passport');
-const GoogleTokenStrategy = require('passport-google-token').Strategy;
+const GoogleTokenStrategy = require('passport-google-oauth2').Strategy;
 const { User } = require('./src/models');
 
 mongoose.connect('mongodb://localhost/backpacker', { useMongoClient: true });
@@ -12,11 +12,9 @@ mongoose.Promise = Promise;
 
 const credentials = {
   clientID: '281227624759-l6dd68h5j2jlcn8scgh4g0kcn42f107l.apps.googleusercontent.com',
-  clientSecret: '',
 };
 
-const verify = (accessToken, refreshToken, profile, done) => User.findById(profile.id, done);
-const signup = (accessToken, refreshToken, profile, done) => {
+const signup = (request, accessToken, refreshToken, profile, done) => {
   const data = {
     firstName: profile.name.givenName,
     lastName: profile.name.familyName,
@@ -25,7 +23,6 @@ const signup = (accessToken, refreshToken, profile, done) => {
   User.create(profile.id, data, done);
 };
 
-passport.use('authenticate', new GoogleTokenStrategy(credentials, verify));
 passport.use('signup', new GoogleTokenStrategy(credentials, signup));
 
 const app = express();
