@@ -26,7 +26,7 @@ router.get('/:id', celebrate(schemas.idParam), async (req, res) => {
   }
 });
 
-router.post('/', passport.authenticate('authenticate'), (req, res) => (req.user ? res.status(201).send(req.user) : res.sendStatus(500)));
+router.post('/', passport.authenticate('signup'), (req, res) => (req.user ? res.status(201).send(req.user) : res.sendStatus(500)));
 
 router.put('/:id', celebrate(schemas.update), async (req, res) => {
   try {
