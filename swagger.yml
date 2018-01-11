@@ -335,6 +335,8 @@
       Location:
         type: object
         properties:
+          name:
+            type: string
           user:
             type: string
             minLength: 24

@@ -8,7 +8,7 @@ const router = express.Router({ mergeParams: true });
 router.put('/:friendId', celebrate(schemas.friendIdParam), async (req, res) => {
   try {
     const { friendId, id } = req.params;
-    await User.update({ _id: id }, { $addToSet: { friends: friendId } });
+    await User.update({ _id: friendId }, { $addToSet: { friends: id } });
     res.sendStatus(204);
   } catch (err) {
     res.sendStatus(500);
