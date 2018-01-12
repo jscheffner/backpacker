@@ -10,7 +10,6 @@ const create = {
   body: Joi.object().keys({
     firstName: Joi.string().min(1).required(),
     lastName: Joi.string().min(1).required(),
-    birthday: Joi.date().required(),
   }),
 };
 
@@ -18,7 +17,6 @@ const update = {
   body: Joi.object().keys({
     firstName: Joi.string().min(1).optional(),
     lastName: Joi.string().min(1).optional(),
-    birthday: Joi.date().optional(),
   }),
   params,
 };
