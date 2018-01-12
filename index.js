@@ -20,6 +20,7 @@ const app = express();
 app.use(cors());
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(bodyParser.json({ type: ['application/json', 'application/merge-patch+json'] }));
+app.use(passport.initialize());
 app.use(passport.authenticate('google-id-token'));
 app.use('/api/v0/', router);
 app.use('/uploads', express.static('uploads'));
