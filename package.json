@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/jscheffner/backpacker-backend#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "celebrate": "^7.0.3",
     "cors": "^2.8.4",
@@ -30,8 +31,10 @@
     "lodash": "^4.17.4",
     "method-override": "^2.3.10",
     "mongoose": "^4.13.6",
+    "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-google-id-token": "^0.4.4",
+    "passport-http": "^0.3.0",
     "swagger-ui-express": "^2.0.11",
     "yamljs": "^0.3.0"
   },
