@@ -42,7 +42,8 @@ router.post('/', (req, res) => {
 router.delete('/:imageId', async (req, res) => {
   try {
     await fs.remove(`uploads/imgs/location/${req.params.imageId}.jpg`);
-    await Location.update({ _id: req.params.locationId }, { $pull: { images: req.params.imageId } });
+    const $pull = { images: req.params.imageId };
+    await Location.update({ _id: req.params.locationId }, { $pull });
     res.sendStatus(204);
   } catch (error) {
     res.sendStatus(500);
