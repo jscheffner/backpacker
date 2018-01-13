@@ -8,6 +8,7 @@ const params = Joi.object().keys({
 
 const create = {
   body: Joi.object().keys({
+    googleId: Joi.string(),
     firstName: Joi.string().min(1).required(),
     lastName: Joi.string().min(1).required(),
   }),

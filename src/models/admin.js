@@ -14,29 +14,23 @@ const adminSchema = new Schema({
   },
 });
 
-adminSchema.pre('save', function hashPassword(next) {
+adminSchema.pre('save', async function hashPassword(next) {
   if (!this.isModified('password')) {
     return next();
   }
 
-  return bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      return next(err);
-    }
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(this.password, salt);
+    this.password = hash;
 
-    return bcrypt.hash(this.password, salt, (error, hash) => {
-      if (error) {
-        return next(err);
-      }
-      this.password = hash;
-
-      return next();
-    });
-  });
+    return next();
+  } catch (err) {
+    return next(err);
+  }
 });
 
 adminSchema.methods.validPassword = function validPassword(pw) {
-  console.log('pw:', pw, 'hash:', this.password);
   return bcrypt.compare(pw, this.password);
 };
 

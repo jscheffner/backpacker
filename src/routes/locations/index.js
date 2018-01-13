@@ -3,8 +3,11 @@ const { Location, User } = require('../..//models');
 const { celebrate } = require('celebrate');
 const schemas = require('../../schemas').location;
 const images = require('./images');
+const { auth } = require('../../middleware');
 
 const router = express.Router();
+router.use(auth.authenticated);
+router.use(auth.adminOrUser);
 
 router.get('/', celebrate(schemas.find), async (req, res) => {
   try {
@@ -31,22 +34,22 @@ router.post('/', celebrate(schemas.create), async (req, res) => {
   }
 });
 
-router.patch('/:id', celebrate(schemas.update), async (req, res) => {
+router.patch('/:locationId', celebrate(schemas.update), async (req, res) => {
   try {
-    await Location.update({ _id: req.params.id }, req.body);
+    await Location.update({ _id: req.params.locationId }, req.body);
     res.sendStatus(204);
   } catch (error) {
     res.sendStatus(500);
   }
 });
 
-router.delete('/:id', celebrate(schemas.remove), async (req, res) => {
+router.delete('/:locationId', celebrate(schemas.remove), async (req, res) => {
   try {
-    const { id } = req.params;
-    const { user } = await Location.findById(id);
+    const { locationId } = req.params;
+    const { user } = await Location.findById(locationId);
     await Promise.all([
-      User.update({ _id: user }, { $pull: { locations: id } }),
-      Location.remove({ _id: id }),
+      User.update({ _id: user }, { $pull: { locations: locationId } }),
+      Location.remove({ _id: locationId }),
     ]);
     res.sendStatus(204);
   } catch (error) {
@@ -54,6 +57,6 @@ router.delete('/:id', celebrate(schemas.remove), async (req, res) => {
   }
 });
 
-router.use('/:id/images', celebrate(schemas.idParam), images);
+router.use('/:locationId/images', celebrate(schemas.idParam), images);
 
 module.exports = router;

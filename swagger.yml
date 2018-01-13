@@ -5,6 +5,8 @@
     title: Backpacker API
   servers:
     - url: http://localhost:3000/api/v0
+  security:
+    - basicAuth: []
   paths:
     /users:
       get:
@@ -319,6 +321,10 @@
           500:
             description: Server Error
   components:
+    securitySchemes:
+      basicAuth:
+        type: http
+        scheme: basic
     schemas:
       User:
         type: object

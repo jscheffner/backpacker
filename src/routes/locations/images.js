@@ -32,7 +32,7 @@ router.post('/', (req, res) => {
   form.on('end', async () => {
     try {
       res.sendStatus(202);
-      await saveFiles(form.openedFiles, req.params.id);
+      await saveFiles(form.openedFiles, req.params.locationId);
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
 router.delete('/:imageId', async (req, res) => {
   try {
     await fs.remove(`uploads/imgs/location/${req.params.imageId}.jpg`);
-    await Location.update({ _id: req.params.id }, { $pull: { images: req.params.imageId } });
+    await Location.update({ _id: req.params.locationId }, { $pull: { images: req.params.imageId } });
     res.sendStatus(204);
   } catch (error) {
     res.sendStatus(500);

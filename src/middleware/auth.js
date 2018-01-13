@@ -8,15 +8,17 @@ const adminOnly = (req, res, next) => {
   }
 };
 
-const adminOrUser = async (req, res, next) => {
-  if (req.user.type === 'admin') {
+const adminOrUser = async ({ user, params, query }, res, next) => {
+  if (user.type === 'admin') {
     return next();
   }
 
-  const ownsId = (!req.params.id || req.params.id === req.user.googleId);
-  const hasFriend = (!req.params.friendId || _.includes(req.user.friends, req.params.friendId));
+  const ownsId = (!params.id || params.id === user.googleId);
+  const hasFriend = (!params.friendId || _.includes(user.friends, params.friendId));
+  const ownsLocation = (!params.locationId || _.includes(user.locations, params.locationId));
+  const hasFriends = (!query.users || _.difference(query.users, user.friends).length === 0);
 
-  const isUserWithPermission = ownsId && hasFriend;
+  const isUserWithPermission = ownsId && hasFriend && hasFriends && ownsLocation;
 
   if (!isUserWithPermission) {
     return res.sendStatus(401);
