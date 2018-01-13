@@ -31,8 +31,9 @@
                 required:
                   - firstName
                   - lastName
-                  - birthday
         responses:
+          200:
+            description: 'The user with the googleId already exists (see response body)'
           201:
             description: 'Created User'
           400:
@@ -329,15 +330,15 @@
       User:
         type: object
         properties:
+          googleId:
+            type: string
+            minLength: 1
           firstName:
             type: string
             minLength: 1
           lastName:
             type: string
             minLength: 1
-          birthday:
-            type: string
-            format: date
       Location:
         type: object
         properties:
