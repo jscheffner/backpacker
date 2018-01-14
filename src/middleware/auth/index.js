@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const init = require('./init');
-const chalk = require('chalk');
 
 const adminOnly = (req, res, next) => {
   if (req.user.type === 'admin') {
@@ -30,10 +29,6 @@ const adminOrUser = async ({ user, params, query }, res, next) => {
 };
 
 const adminOrUserCandidate = ({ user, body }, res, next) => {
-  console.log(chalk.blue(user));
-  if (user.type === 'admin') {
-    return res.status(200).json(_.pick(user, ['_id', 'username']));
-  }
   if (user.type === 'user') {
     return res.status(200).json(_.pick(user, ['_id', 'googleId', 'firstName', 'lastName']));
   }
