@@ -15,7 +15,7 @@ router.use(auth.authenticated);
 router.get('/', auth.adminOnly, async (req, res) => {
   try {
     const user = await User.find({}, '_id firstName lastName birthday avatar friends locations').populate('locations', '-__v');
-    return res.status(200).send(user);
+    return res.status(200).json(user);
   } catch (err) {
     return res.sendStatus(500);
   }
@@ -33,8 +33,8 @@ router.get('/:id', celebrate(schemas.idParam), auth.adminOrUser, async (req, res
 router.post('/', celebrate(schemas.create), auth.adminOrUserCandidate, async (req, res) => {
   try {
     const rawUser = await User.create(req.body);
-    const user = _.pick(rawUser, ['_id', 'firstName', 'lastName']);
-    return res.status(201).send(user);
+    const user = _.pick(rawUser, ['_id', 'googleId', 'firstName', 'lastName']);
+    return res.status(201).json(user);
   } catch (err) {
     return res.sendStatus(500);
   }

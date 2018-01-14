@@ -1,4 +1,6 @@
 const _ = require('lodash');
+const init = require('./init');
+const chalk = require('chalk');
 
 const adminOnly = (req, res, next) => {
   if (req.user.type === 'admin') {
@@ -21,18 +23,23 @@ const adminOrUser = async ({ user, params, query }, res, next) => {
   const isUserWithPermission = ownsId && hasFriend && hasFriends && ownsLocation;
 
   if (!isUserWithPermission) {
-    return res.sendStatus(401);
+    return res.sendStatus(403);
   }
 
   return next();
 };
 
-const adminOrUserCandidate = (req, res, next) => {
-  if (req.user.type === 'user') {
-    return res.status(200).send(_.pick(req.user, ['_id', 'googleId', 'firstName', 'lastName']));
+const adminOrUserCandidate = ({ user, body }, res, next) => {
+  console.log(chalk.blue(user));
+  if (user.type === 'admin') {
+    return res.status(200).json(_.pick(user, ['_id', 'username']));
   }
-  const isUserCandidateWithPermission = req.user.type === 'user_candidate' && req.user.googleId === req.body.googleId;
-  const isAdmin = req.user.type === 'admin';
+  if (user.type === 'user') {
+    return res.status(200).json(_.pick(user, ['_id', 'googleId', 'firstName', 'lastName']));
+  }
+
+  const isUserCandidateWithPermission = user.type === 'user_candidate' && user.googleId === body.googleId;
+  const isAdmin = user.type === 'admin';
 
   if (!isAdmin && !isUserCandidateWithPermission) {
     return res.sendStatus(403);
@@ -49,6 +56,7 @@ const authenticated = (req, res, next) => {
 };
 
 module.exports = {
+  init,
   authenticated,
   adminOnly,
   adminOrUser,

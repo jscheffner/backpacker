@@ -6,20 +6,21 @@ const { errors } = require('celebrate');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const morgan = require('morgan');
-const authentication = require('./authentication');
+const { auth } = require('./src/middleware');
+const chalk = require('chalk');
 
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost/backpacker', { useMongoClient: true });
+mongoose.connect('mongodb://localhost/backpacker', { useMongoClient: true }).catch(err => console.error(chalk.red(err)));
 
 const app = express();
-app.use(authentication());
+app.use(auth.init());
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(bodyParser.json({ type: ['application/json', 'application/merge-patch+json'] }));
 app.use('/api/v0/', router);
 app.use('/uploads', express.static('uploads'));
-app.listen(3000, () => console.log('App listening on port 3000!'));
+app.listen(3000, () => console.log(chalk.blue('App listening on port 3000!')));
 app.use(errors());
 
 module.exports = {

@@ -1,8 +1,9 @@
 const GoogleTokenStrategy = require('passport-google-id-token');
 const { BasicStrategy } = require('passport-http');
-const { User, Admin } = require('./src/models');
+const { User, Admin } = require('../../models');
 const _ = require('lodash');
 const passport = require('passport');
+const chalk = require('chalk');
 
 const clientID = '281227624759-l6dd68h5j2jlcn8scgh4g0kcn42f107l.apps.googleusercontent.com';
 
@@ -10,6 +11,9 @@ async function createDefaultAdmin() {
   const defaultAdmin = await Admin.findOne({ username: 'admin' });
   if (!defaultAdmin) {
     Admin.create({ username: 'admin', password: '1234' });
+    console.log(chalk.yellow('Default admin created. Please change its password'));
+  } else if (await defaultAdmin.validPassword('1234')) {
+    console.log(chalk.yellow('The default admin password is supposed to be temporary. Please change it.'));
   }
 }
 
@@ -40,7 +44,7 @@ module.exports = () => {
   try {
     createDefaultAdmin();
   } catch (error) {
-    console.log(error);
+    console.log('Error creating default admin:', chalk.red(error));
   }
 
   passport.use(new GoogleTokenStrategy({ clientID }, verifyGoogleUser));

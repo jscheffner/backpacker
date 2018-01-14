@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
     const select = '_id firstName lastName avatar locations';
     const { friends } = await User.findOne({ _id: req.params.id }, 'friends')
       .populate({ path: 'friends', select, populate: { path: 'locations', select: '-__v' } });
-    res.status(200).send(friends);
+    res.status(200).json(friends);
   } catch (err) {
     res.sendStatus(500);
   }
