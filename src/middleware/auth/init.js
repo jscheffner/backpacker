@@ -33,7 +33,15 @@ async function verifyAdmin(username, password, done) {
 async function verifyGoogleUser(token, googleId, done) {
   try {
     const rawUser = await User.findOne({ googleId });
-    const user = rawUser ? _.set(rawUser, 'type', 'user') : { googleId, type: 'user_candidate' };
+    let user;
+    if (rawUser) {
+      user = _.set(rawUser, 'type', 'user');
+      user._id = _.toString(user._id);
+      user.friends = _.map(user.friends, _.toString);
+      user.locations = _.map(user.friends, _.toString);
+    } else {
+      user = { googleId, type: 'user_candidate' };
+    }
     done(null, user);
   } catch (err) {
     done(err);
