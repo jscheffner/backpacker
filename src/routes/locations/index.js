@@ -6,7 +6,7 @@ const images = require('./images');
 const { auth } = require('../../middleware');
 
 const router = express.Router();
-router.use(auth.authenticated);
+router.use(auth.authenticate(['basic', 'google-id-token']));
 router.use(auth.adminOrUser);
 
 router.get('/', celebrate(schemas.find), async (req, res) => {

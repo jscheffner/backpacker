@@ -5,16 +5,14 @@ const { celebrate } = require('celebrate');
 const _ = require('lodash');
 const friends = require('./friends');
 const avatar = require('./avatar');
-const passport = require('passport');
 const { auth } = require('../../middleware');
 
 const router = express.Router();
-router.use(passport.authenticate(['basic', 'google-id-token'], { session: false }));
-router.use(auth.authenticated);
+router.use(auth.authenticate(['basic', 'google-id-token']));
 
 router.get('/', auth.adminOnly, async (req, res) => {
   try {
-    const user = await User.find({}, '_id firstName lastName birthday avatar friends locations').populate('locations', '-__v');
+    const user = await User.find({}, '_id googleId firstName lastName avatar friends locations').populate('locations', '-__v');
     return res.status(200).json(user);
   } catch (err) {
     return res.sendStatus(500);

@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const init = require('./init');
+const passport = require('passport');
 
 const adminOnly = (req, res, next) => {
   if (req.user.type === 'admin') {
@@ -14,10 +15,10 @@ const adminOrUser = async ({ user, params, query }, res, next) => {
     return next();
   }
 
-  const ownsId = (!params.id || params.id === user._id);
-  const hasFriend = (!params.friendId || _.includes(user.friends, params.friendId));
-  const ownsLocation = (!params.locationId || _.includes(user.locations, params.locationId));
-  const hasFriends = (!query.users || _.difference(query.users, user.friends).length === 0);
+  const ownsId = !params.id || (params.id === user._id);
+  const hasFriend = !params.friendId || _.includes(user.friends, params.friendId);
+  const ownsLocation = !params.locationId || _.includes(user.locations, params.locationId);
+  const hasFriends = !query.users || (_.difference(query.users, user.friends).length === 0);
 
   const isUserWithPermission = ownsId && hasFriend && hasFriends && ownsLocation;
 
@@ -42,17 +43,11 @@ const adminOrUserCandidate = ({ user, body }, res, next) => {
   return next();
 };
 
-const authenticated = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-};
+const authenticate = strategy => passport.authenticate(strategy, { session: false });
 
 module.exports = {
+  authenticate,
   init,
-  authenticated,
   adminOnly,
   adminOrUser,
   adminOrUserCandidate,
