@@ -15,7 +15,7 @@ const adminOrUser = async ({ user, params, query }, res, next) => {
     return next();
   }
 
-  const ownsId = !params.id || (params.id === user._id);
+  const ownsId = !params.id || (params.id.toString() === user._id);
   const hasFriend = !params.friendId || _.includes(user.friends, params.friendId);
   const ownsLocation = !params.locationId || _.includes(user.locations, params.locationId);
   const hasFriends = !query.users || (_.difference(query.users, user.friends).length === 0);
