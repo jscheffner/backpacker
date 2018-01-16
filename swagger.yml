@@ -56,7 +56,7 @@
           200:
             description: The user information
           400:
-            description: Bade Request
+            description: Bad Request
           500:
             description: Server Error
       patch:
@@ -339,6 +339,8 @@
           lastName:
             type: string
             minLength: 1
+          email:
+            type: string
       Location:
         type: object
         properties:

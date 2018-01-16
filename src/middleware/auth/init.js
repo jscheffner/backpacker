@@ -4,8 +4,9 @@ const { User, Admin } = require('../../models');
 const _ = require('lodash');
 const passport = require('passport');
 const chalk = require('chalk');
+const config = require('config');
 
-const clientID = '281227624759-l6dd68h5j2jlcn8scgh4g0kcn42f107l.apps.googleusercontent.com';
+const clientID = config.get('auth.clientID');
 
 async function createDefaultAdmin() {
   const defaultAdmin = await Admin.findOne({ username: 'admin' });
@@ -33,6 +34,7 @@ async function verifyAdmin(username, password, done) {
 const wrapUser = user => _
   .chain(user)
   .set('type', 'user')
+  .set('_id', user._id.toString())
   .set('friends', _.map(user.friends, _.toString))
   .set('locations', _.map(user.locations, _.toString))
   .value();
@@ -41,7 +43,6 @@ async function verifyGoogleUser(token, googleId, done) {
   try {
     const rawUser = await User.findOne({ googleId });
     const user = rawUser ? wrapUser(rawUser) : { googleId, type: 'user_candidate' };
-    console.log(user);
     done(null, user);
   } catch (err) {
     done(err);
@@ -52,7 +53,7 @@ module.exports = () => {
   try {
     createDefaultAdmin();
   } catch (error) {
-    console.log('Error creating default admin:', chalk.red(error));
+    console.log(chalk.red('Error creating default admin:'), error);
   }
 
   passport.use(new GoogleTokenStrategy({ clientID }, verifyGoogleUser));

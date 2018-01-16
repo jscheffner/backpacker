@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const config = require('config');
 
+const salt = config.get('auth.salt');
 const { Schema } = mongoose;
 
 const adminSchema = new Schema({
@@ -20,7 +22,6 @@ adminSchema.pre('save', async function hashPassword(next) {
   }
 
   try {
-    const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(this.password, salt);
     this.password = hash;
 

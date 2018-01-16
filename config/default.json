@@ -1,0 +1,12 @@
+{
+  "server": {
+    "port": "3000"
+  },
+  "db": {
+    "uri": "mongodb://localhost/backpacker"
+  },
+  "auth": {
+    "salt": 10,
+    "clientID": "281227624759-l6dd68h5j2jlcn8scgh4g0kcn42f107l.apps.googleusercontent.com"
+  }
+}

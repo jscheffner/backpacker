@@ -11,6 +11,7 @@ const create = {
     googleId: Joi.string(),
     firstName: Joi.string().min(1).required(),
     lastName: Joi.string().min(1).required(),
+    email: Joi.string().email(),
   }),
 };
 
@@ -18,6 +19,7 @@ const update = {
   body: Joi.object().keys({
     firstName: Joi.string().min(1).optional(),
     lastName: Joi.string().min(1).optional(),
+    email: Joi.string().email().optional(),
   }),
   params,
 };

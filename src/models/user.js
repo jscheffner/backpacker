@@ -15,6 +15,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
   locations: [{ type: Schema.Types.ObjectId, ref: 'Location' }],
   friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   avatar: String,

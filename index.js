@@ -8,9 +8,14 @@ const cors = require('cors');
 const morgan = require('morgan');
 const { auth } = require('./src/middleware');
 const chalk = require('chalk');
+const config = require('config');
+
+const dbUri = config.get('db.uri');
+const port = config.get('server.port');
 
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost/backpacker', { useMongoClient: true })
+mongoose.connect(dbUri, { useMongoClient: true })
+  .then(() => console.log(chalk.blue(`Connected to DB ${dbUri}`)))
   .catch(err => console.error(chalk.red(err)));
 
 const app = express();
@@ -21,7 +26,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(bodyParser.json({ type: ['application/json', 'application/merge-patch+json'] }));
 app.use('/', router);
 app.use('/uploads', express.static('uploads'));
-app.listen(3000, () => console.log(chalk.blue('App listening on port 3000!')));
+app.listen(port, () => console.log(chalk.blue(`App listening on port ${port}!`)));
 app.use(errors());
 
 module.exports = {
