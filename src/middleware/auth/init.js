@@ -30,18 +30,18 @@ async function verifyAdmin(username, password, done) {
   }
 }
 
+const wrapUser = user => _
+  .chain(user)
+  .set('type', 'user')
+  .set('friends', _.map(user.friends, _.toString))
+  .set('locations', _.map(user.locations, _.toString))
+  .value();
+
 async function verifyGoogleUser(token, googleId, done) {
   try {
     const rawUser = await User.findOne({ googleId });
-    let user;
-    if (rawUser) {
-      user = _.set(rawUser, 'type', 'user');
-      user._id = _.toString(user._id);
-      user.friends = _.map(user.friends, _.toString);
-      user.locations = _.map(user.friends, _.toString);
-    } else {
-      user = { googleId, type: 'user_candidate' };
-    }
+    const user = rawUser ? wrapUser(rawUser) : { googleId, type: 'user_candidate' };
+    console.log(user);
     done(null, user);
   } catch (err) {
     done(err);
