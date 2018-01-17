@@ -1,10 +1,10 @@
 const { Joi } = require('celebrate');
 
-const id = Joi.string().length(24).required();
+const locationId = Joi.string().length(24).required();
 
 const find = {
   query: {
-    users: Joi.array().items(id).single().required(),
+    users: Joi.array().items(locationId).single().required(),
     googleId: Joi.string().optional(),
   },
 };
@@ -12,7 +12,7 @@ const find = {
 const create = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    user: id,
+    user: locationId,
     description: Joi.string().optional(),
     favorite: Joi.boolean().optional(),
     googleId: Joi.string().required(),
@@ -25,7 +25,7 @@ const create = {
 
 const update = {
   params: Joi.object().keys({
-    id,
+    locationId,
   }),
   body: Joi.object().keys({
     description: Joi.string().optional(),
@@ -38,13 +38,13 @@ const update = {
 
 const remove = {
   params: Joi.object().keys({
-    id,
+    locationId,
   }),
 };
 
 const idParam = {
   params: Joi.object().keys({
-    id,
+    locationId,
   }),
 };
 
