@@ -12,7 +12,9 @@ router.use(auth.authenticate(['basic', 'google-id-token']));
 
 router.get('/', auth.adminOnly, async (req, res) => {
   try {
-    const user = await User.find({}, '_id googleId firstName lastName avatar friends locations').populate('locations', '-__v');
+    const user = await User.find({}, '_id googleId firstName lastName email avatar friends locations')
+      .populate('locations', '-__v')
+      .populate('friends', '-__v');
     return res.status(200).json(user);
   } catch (err) {
     return res.sendStatus(500);
