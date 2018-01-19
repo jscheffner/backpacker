@@ -6,6 +6,12 @@ const params = Joi.object().keys({
   id,
 });
 
+const search = {
+  query: Joi.object().keys({
+    email: Joi.string().email().optional(),
+  }),
+};
+
 const create = {
   body: Joi.object().keys({
     googleId: Joi.string(),
@@ -47,4 +53,5 @@ module.exports = {
   idParam,
   friendIdBody,
   friendIdParam,
+  search,
 };

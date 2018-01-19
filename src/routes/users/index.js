@@ -10,11 +10,14 @@ const { auth } = require('../../middleware');
 const router = express.Router();
 router.use(auth.authenticate(['basic', 'google-id-token']));
 
-router.get('/', auth.adminOnly, async (req, res) => {
+router.get('/', celebrate(schemas.search), auth.adminOrUser, async (req, res) => {
   try {
-    const user = await User.find({}, '_id googleId firstName lastName email avatar friends locations')
+    const rawUser = await User.find(req.query, '_id googleId firstName lastName locations email avatar friends')
       .populate('locations', '-__v')
       .populate('friends', '-__v');
+
+    const user = req.user.type === 'admin' ? rawUser : _.pick(rawUser, ['firstName', 'lastName', 'email', '_id']);
+
     return res.status(200).json(user);
   } catch (err) {
     return res.sendStatus(500);

@@ -10,7 +10,11 @@ const adminOnly = (req, res, next) => {
   }
 };
 
-const adminOrUser = async ({ user, params, query }, res, next) => {
+const adminOrUser = async (req, res, next) => {
+  const {
+    user, params, query, route,
+  } = req;
+
   if (user.type === 'admin') {
     return next();
   }
@@ -20,9 +24,11 @@ const adminOrUser = async ({ user, params, query }, res, next) => {
   const ownsLocation = !params.locationId || _.includes(user.locations, params.locationId);
   const hasFriends = !query.users || (_.difference(query.users, user.friends).length === 0);
 
-  const isUserWithPermission = ownsId && hasFriend && hasFriends && ownsLocation;
+  const hasRequiredFields = (route.path !== '/users' || query.email);
 
-  if (!isUserWithPermission) {
+  const hasPermission = ownsId && hasFriend && hasFriends && ownsLocation && hasRequiredFields;
+
+  if (!hasPermission) {
     return res.sendStatus(403);
   }
 
