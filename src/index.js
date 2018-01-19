@@ -1,12 +1,12 @@
 const express = require('express');
-const router = require('./src/routes');
+const router = require('.//routes');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const morgan = require('morgan');
-const { auth } = require('./src/middleware');
+const { auth } = require('./middleware');
 const chalk = require('chalk');
 const config = require('config');
 

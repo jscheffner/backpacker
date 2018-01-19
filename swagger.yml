@@ -21,7 +21,11 @@
               type: string
         responses:
           200:
-            description: All Users
+            description: All Users / the users matching the search criteria
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: Users have to provide an email address.
           500:
             description: Server Error
       post:
@@ -44,6 +48,12 @@
             description: 'Created User'
           400:
             description: 'Bad Request'
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: >
+                           Forbidden: The google id in the request body has
+                           to match the user id the token was created for.
           500:
             description: 'Server Error'
     /users/{userId}:
@@ -63,6 +73,10 @@
             description: The User
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only access their own profile'
           500:
             description: Server Error
       patch:
@@ -78,6 +92,10 @@
         responses:
           204:
             description: User Updated
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only patch their own profile'
           400:
             description: Bad Request
           500:
@@ -91,6 +109,10 @@
             description: User Deleted
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only delete their own profile'
           500:
             description: Server Error
     /users/{userId}/friends:
@@ -110,6 +132,10 @@
             description: User's Friends
           400:
             description: 'Bad Request'
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only access their own friends'
           500:
             description: 'Server Error'
     /users/{userId}/friends/{friendId}:
@@ -135,6 +161,10 @@
             description: Friend Added
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only add friends to themselves'
           500:
             description: Server Error
       delete:
@@ -146,6 +176,10 @@
             description: Friend Removed
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only remove their own friends'
           500:
             description: Server Error
     /users/{userId}/avatar:
@@ -173,6 +207,10 @@
             description: Avatar Uploaded
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only upload an avatar to their own profile'
           500:
             description: Server Error
       delete:
@@ -184,6 +222,10 @@
             description: Avatar Removed
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only remove their own avatar'
           500:
             description: Server Error
     /locations:
@@ -211,6 +253,10 @@
             description: Locations
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: The user can only request locations of their own friends'
           500:
             description: Server Error
       post:
@@ -233,6 +279,10 @@
             description: Created Location
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: Forbidden: Users can only create locations for themselves
           500:
             description: Server Error
               
@@ -260,6 +310,10 @@
             description: Location Updated
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only patch their own locations'
           500:
             description: Server Error
       delete:
@@ -271,6 +325,10 @@
             description: User removed
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only delete their own locations'
           500:
             description: Server Error
     /locations/{id}/images:
@@ -300,6 +358,10 @@
             description: Image Upload Started
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only add images to their own locations'
           500:
             description: Server Error
     /location/{locationId}/images/{imageId}:
@@ -325,6 +387,10 @@
             description: Image Deleted
           400:
             description: Bad Request
+          401:
+            description: 'Unauthorized: Authentication failed'
+          403:
+            description: 'Forbidden: Users can only remove images from their own locations'
           500:
             description: Server Error
   components:

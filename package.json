@@ -2,10 +2,10 @@
   "name": "backpacker-backend",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "lint": "eslint index.js src/**/*.js",
-    "start": "node index.js"
+    "lint": "eslint src/**/*.js",
+    "start": "node src/index.js"
   },
   "pre-commit": [
     "lint"
@@ -37,6 +37,7 @@
     "passport": "^0.4.0",
     "passport-google-id-token": "^0.4.4",
     "passport-http": "^0.3.0",
+    "pusher": "^1.5.1",
     "swagger-ui-express": "^2.0.11",
     "yamljs": "^0.3.0"
   },

@@ -12,7 +12,7 @@ const adminOnly = (req, res, next) => {
 
 const adminOrUser = async (req, res, next) => {
   const {
-    user, params, query, route,
+    user, params, query, baseUrl,
   } = req;
 
   if (user.type === 'admin') {
@@ -24,7 +24,7 @@ const adminOrUser = async (req, res, next) => {
   const ownsLocation = !params.locationId || _.includes(user.locations, params.locationId);
   const hasFriends = !query.users || (_.difference(query.users, user.friends).length === 0);
 
-  const hasRequiredFields = (route.path !== '/users' || query.email);
+  const hasRequiredFields = (baseUrl !== '/users' || query.email);
 
   const hasPermission = ownsId && hasFriend && hasFriends && ownsLocation && hasRequiredFields;
 
