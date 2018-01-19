@@ -10,7 +10,7 @@ const { auth } = require('../../middleware');
 const router = express.Router();
 router.use(auth.authenticate(['basic', 'google-id-token']));
 
-router.get('/', celebrate(schemas.search), auth.adminOrUser, async (req, res) => {
+router.get('/', celebrate(schemas.search), auth.adminOrUser, auth.mandatoryQueryParameter('email'), async (req, res) => {
   try {
     const rawUser = await User.find(req.query, '_id googleId firstName lastName locations email avatar friends')
       .populate('locations', '-__v')

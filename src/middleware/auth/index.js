@@ -10,11 +10,7 @@ const adminOnly = (req, res, next) => {
   }
 };
 
-const adminOrUser = async (req, res, next) => {
-  const {
-    user, params, query, baseUrl,
-  } = req;
-
+const adminOrUser = async ({ user, params, query }, res, next) => {
   if (user.type === 'admin') {
     return next();
   }
@@ -24,9 +20,7 @@ const adminOrUser = async (req, res, next) => {
   const ownsLocation = !params.locationId || _.includes(user.locations, params.locationId);
   const hasFriends = !query.users || (_.difference(query.users, user.friends).length === 0);
 
-  const hasRequiredFields = (baseUrl !== '/users' || query.email);
-
-  const hasPermission = ownsId && hasFriend && hasFriends && ownsLocation && hasRequiredFields;
+  const hasPermission = ownsId && hasFriend && hasFriends && ownsLocation;
 
   if (!hasPermission) {
     return res.sendStatus(403);
@@ -49,6 +43,14 @@ const adminOrUserCandidate = ({ user, body }, res, next) => {
   return next();
 };
 
+const mandatoryQueryParameter = name => (req, res, next) => {
+  if (req.user.type === 'admin' || req.query[name]) {
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+};
+
 const authenticate = strategy => passport.authenticate(strategy, { session: false });
 
 module.exports = {
@@ -57,5 +59,6 @@ module.exports = {
   adminOnly,
   adminOrUser,
   adminOrUserCandidate,
+  mandatoryQueryParameter,
 };
 
