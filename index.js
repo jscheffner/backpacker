@@ -12,6 +12,7 @@ const config = require('config');
 
 const dbUri = config.get('db.uri');
 const port = config.get('server.port');
+const format = config.get('log.format');
 
 mongoose.Promise = Promise;
 mongoose.connect(dbUri, { useMongoClient: true })
@@ -20,7 +21,7 @@ mongoose.connect(dbUri, { useMongoClient: true })
 
 const app = express();
 app.use(auth.init());
-app.use(morgan('tiny'));
+app.use(morgan(format));
 app.use(cors());
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(bodyParser.json({ type: ['application/json', 'application/merge-patch+json'] }));
