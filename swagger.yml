@@ -4,7 +4,7 @@
     version: 0.1.0
     title: Backpacker API
   servers:
-    - url: http://localhost:3000/api/v0
+    - url: http://localhost:3000/
   security:
     - basicAuth: []
   paths:
