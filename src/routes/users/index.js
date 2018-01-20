@@ -12,13 +12,13 @@ router.use(auth.authenticate(['basic', 'google-id-token']));
 
 router.get('/', celebrate(schemas.search), auth.adminOrUser, auth.mandatoryQueryParameter('email'), async (req, res) => {
   try {
-    const rawUser = await User.find(req.query, '_id googleId firstName lastName locations email avatar friends')
+    const rawUsers = await User.find(req.query, '_id googleId firstName lastName locations email avatar friends')
       .populate('locations', '-__v')
       .populate('friends', '-__v');
 
-    const user = req.user.type === 'admin' ? rawUser : _.pick(rawUser, ['firstName', 'lastName', 'email', '_id']);
+    const users = req.user.type === 'admin' ? rawUsers : _.map(rawUsers, rawUser => _.pick(rawUser, ['firstName', 'lastName', 'email', '_id']));
 
-    return res.status(200).json(user);
+    return res.status(200).json(users);
   } catch (err) {
     return res.sendStatus(500);
   }

@@ -44,7 +44,7 @@ const adminOrUserCandidate = ({ user, body }, res, next) => {
 };
 
 const mandatoryQueryParameter = name => (req, res, next) => {
-  if (req.user.type === 'admin' || req.query[name]) {
+  if (req.user.type === 'admin' || _.has(req.query, name)) {
     next();
   } else {
     res.sendStatus(403);
