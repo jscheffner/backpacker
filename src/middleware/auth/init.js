@@ -34,14 +34,15 @@ async function verifyAdmin(username, password, done) {
 const wrapUser = user => _
   .chain(user)
   .set('type', 'user')
-  .set('_id', user._id.toString())
-  .set('friends', _.map(user.friends, _.toString))
-  .set('locations', _.map(user.locations, _.toString))
+  .set('friends', _.map(user.friends, friend => friend.id))
+  .set('locations', _.map(user.locations, loc => loc.id))
   .value();
 
 async function verifyGoogleUser(token, googleId, done) {
   try {
-    const rawUser = await User.findOne({ googleId });
+    const rawUser = await User.findOne({ googleId })
+      .populate('locations')
+      .populate('friends');
     const user = rawUser ? wrapUser(rawUser) : { googleId, type: 'user_candidate' };
     done(null, user);
   } catch (err) {

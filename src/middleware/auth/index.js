@@ -43,7 +43,7 @@ const adminOrUserCandidate = ({ user, body }, res, next) => {
   return next();
 };
 
-const mandatoryQueryParameter = name => (req, res, next) => {
+const query = name => (req, res, next) => {
   if (req.user.type === 'admin' || _.has(req.query, name)) {
     next();
   } else {
@@ -59,6 +59,6 @@ module.exports = {
   adminOnly,
   adminOrUser,
   adminOrUserCandidate,
-  mandatoryQueryParameter,
+  query,
 };
 
