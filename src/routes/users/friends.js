@@ -7,24 +7,22 @@ const firebase = require('firebase-admin');
 const router = express.Router({ mergeParams: true });
 
 async function notify(userId, friendId) {
-  const { registrationToken } = await User.findById(friendId, 'registrationToken');
-  if (!registrationToken) {
+  const { deviceToken } = await User.findById(friendId, 'deviceToken');
+  if (!deviceToken) {
     console.log(`${userId} could not notify ${friendId} because the device token is missing`);
     return;
   }
 
   const { firstName, lastName } = await User.findById(userId, 'id firstName lastName');
-
-  const payload = {
-    data: {
-      topic: 'friend_added',
-      userId,
-      firstName,
-      lastName,
-    },
+  const data = {
+    topic: 'friend_added',
+    userId,
+    firstName,
+    lastName,
   };
+
   try {
-    await firebase.messaging().sendToDevice(registrationToken, payload);
+    await firebase.messaging().sendToDevice(deviceToken, { data });
     console.log(`${userId} notified ${friendId}: friend added`);
   } catch (err) {
     console.log('Sending notification to device failed:', err);
@@ -48,8 +46,8 @@ router.delete('/:friendId', celebrate(schemas.friendIdParam), async (req, res) =
   try {
     const { id, friendId } = req.params;
     await Promise.all([
-      await User.update({ _id: id }, { $pull: { friends: friendId } }),
-      await User.update({ _id: friendId }, { $pull: { friends: id } }),
+      User.update({ _id: id }, { $pull: { friends: friendId } }),
+      User.update({ _id: friendId }, { $pull: { friends: id } }),
     ]);
     res.sendStatus(204);
   } catch (err) {
