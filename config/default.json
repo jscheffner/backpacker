@@ -11,5 +11,20 @@
   },
   "log": {
     "format": "dev"
+  },
+  "firebase": {
+    "url": "https://backpacker-app-1512139294560.firebaseio.com",
+    "credentials": {
+      "type": "service_account",
+      "project_id": "backpacker-app-1512139294560",
+      "private_key_id": "cbb74afa778bf60334ad87fe263672d7b5a387e0",
+      "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCzbf6lr7t2PVVl\nskIHMQIYXuWDkpUJY76UukgORNdIrnkx4hkBLHWukDWSgWlgVZkKx9iOwxBZFIHV\nq+RvIpGYVC1vC1g8WEInaCNR7a2kFoViDhaB7vspI9J3Y1ys4w5mQ+n5TEmBj0vk\nblN7MnN5W4wx0SEfVjSXkf+hAkZWA6gHW0K86U2T7Nl6veJJq10yPkAxSCrBuzu9\nhpSzODL0rnbeRGXOv+agcFPU3UEimdmST+ejZPwM+o8Xk5s6KRu1ahDLUCCHDGpY\n7GpoAUCFHXSudFtiHXyF0ZoJkeqQ74Oyv8ZoY9T5mHNR/8gWCnbcg6e7sbp4K2Zg\n6M5GNIwnAgMBAAECggEAAQembgddBpfh3Rm8VPPm5K1AGP9m4+0SziIRls9graCe\nvna4mQVLJEuHRduAoivA8KBmsaRp/BuTholG4DfCaS2Wgywn/1SsWzM2/K87ZL/i\nV8aSl3//02PKv00D3lQr+Xygo6yDQX9JOrrtYhLPOd5DfD0MjnRSt0oAaHQDDlb9\nkey4wxP9Bnlsx30+ce6XKBACsJ/JhIR9RXG758pCo1t5N6U0GBRj4pF0mamgrtj0\nA7HihGQDnkHlNI02qmJIeqKXQomwDynm7BkrcqDEgWmXVxxhfBxriNDo7MO8YyQT\ntNMDDL0nrs6cXog5fbIbwWymnFmP4CcVuE4LAab+eQKBgQDgLAoYiRn8TizBhgMn\nJSl74oLDAgtmh3frXdSaCML1gWaVRvmVZuVAB0ThI6XL2bpG7VVTxxrqVgZTmhgW\nkxlNoLItpkcUozAw3GsG3uKkwOqFhTyMkyhFYLv0NIvH2mjM2pGiVynQFxI3f5K9\nx/XlhwLpvrUhlz5QwTO9joqSPwKBgQDM57VrN7kEDjS/qAnVOVp2Ily4hws3fJyc\nEsogpZTSLwlVUSLWyqhtdePDJMFC09bu3x70w8Ss7AcWGJbuwID7nrV2n3TY8zLv\npYCtSTprjTxKN5X/szvHtt+bZEic146k/ZNJx9CWUkZebsZnQRUN9zJ0fQoOA4wx\nX+WgSzq8GQKBgQCgX0E1vlelxbOFGz+EMLTV2P1dT0giqIWlD3J6ZAw9oL5nyufg\n90TIoqqnOl5xUKlP9phVoBpkTPintJTJCaFPhMgTmmI9pGVkfzveJXQVE6JztRbV\nJq3nvEWadkENz/WroC4R6rOSF/9DTvQG61fCRe1Slcl1Z4MAOMewM5p09wKBgDth\nKoHXtBYox8CCwda4uC5j5trSx71cr0XLbCfp1CbU2q+Ow7nbINQXxdlXXWowWaj/\nn8jusqAqBiOxHIwz3S0N4ShvLT1xvOEV5SRShEuGsmIPmbhwCHLn3AT8Gs7Y6M2H\nbpeDAD+PuDTFhVmG0sMpT8XSNoe5H3dvguvg4TSBAoGBAJ0c4b0Hhdph3W8SJU66\nxem35KG9kLjeP9D/zR8Kf5Q5PyjKNNH/+ofS+TYgK9ChDii5zC6P2Zp0b6Fz7wxB\nelG0pDsaXzUN6redDGsjAFLj7udEztptMjhnSYsRjALfD/S8zetHc3m9FJsvnC8o\nfoTN5nQt3YzYMVTHwNPGyIOz\n-----END PRIVATE KEY-----\n",
+      "client_email": "firebase-adminsdk-tcjcp@backpacker-app-1512139294560.iam.gserviceaccount.com",
+      "client_id": "110799501164989651790",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://accounts.google.com/o/oauth2/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-tcjcp%40backpacker-app-1512139294560.iam.gserviceaccount.com"
+    }
   }
 }

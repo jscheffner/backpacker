@@ -7,6 +7,10 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
+  deviceToken: {
+    type: String,
+    required: false,
+  },
   firstName: {
     type: String,
     required: true,

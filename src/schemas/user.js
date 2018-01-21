@@ -15,6 +15,7 @@ const search = {
 const create = {
   body: Joi.object().keys({
     googleId: Joi.string(),
+    deviceToken: Joi.string().optional(),
     firstName: Joi.string().min(1).required(),
     lastName: Joi.string().min(1).required(),
     email: Joi.string().email(),
@@ -26,6 +27,7 @@ const update = {
     firstName: Joi.string().min(1).optional(),
     lastName: Joi.string().min(1).optional(),
     email: Joi.string().email().optional(),
+    deviceToken: Joi.string().optional(),
   }),
   params,
 };
@@ -47,6 +49,12 @@ const friendIdParam = {
   }),
 };
 
+const notify = {
+  query: Joi.object().keys({
+    notify: Joi.boolean().optional(),
+  }),
+};
+
 module.exports = {
   create,
   update,
@@ -54,4 +62,5 @@ module.exports = {
   friendIdBody,
   friendIdParam,
   search,
+  notify,
 };

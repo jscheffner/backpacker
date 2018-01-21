@@ -9,10 +9,18 @@ const morgan = require('morgan');
 const { auth } = require('./middleware');
 const chalk = require('chalk');
 const config = require('config');
+const firebase = require('firebase-admin');
 
 const dbUri = config.get('db.uri');
 const port = config.get('server.port');
 const format = config.get('log.format');
+const firebaseCredentials = config.get('firebase.credentials');
+const firebaseUrl = config.get('firebase.url');
+
+firebase.initializeApp({
+  credential: firebase.credential.cert(firebaseCredentials),
+  databaseURL: firebaseUrl,
+});
 
 mongoose.Promise = Promise;
 mongoose.connect(dbUri, { useMongoClient: true })
