@@ -31,18 +31,11 @@ async function verifyAdmin(username, password, done) {
   }
 }
 
-const wrapUser = user => _
-  .chain(user)
-  .set('type', 'user')
-  .set('friends', _.map(user.friends, friend => friend.id))
-  .set('locations', _.map(user.locations, loc => loc.id))
-  .value();
+const wrapUser = user => _.set(user, 'type', 'user');
 
 async function verifyGoogleUser(token, googleId, done) {
   try {
-    const rawUser = await User.findOne({ googleId })
-      .populate('locations')
-      .populate('friends');
+    const rawUser = await User.findOne({ googleId });
     const user = rawUser ? wrapUser(rawUser) : { googleId, type: 'user_candidate' };
     done(null, user);
   } catch (err) {

@@ -3,6 +3,7 @@ const { User } = require('../../models');
 const schemas = require('../../schemas').user;
 const { celebrate } = require('celebrate');
 const firebase = require('firebase-admin');
+const { auth } = require('../../middleware');
 
 const router = express.Router({ mergeParams: true });
 
@@ -29,7 +30,24 @@ async function notify(userId, friendId) {
   }
 }
 
-router.put('/:friendId', celebrate(schemas.friendIdParam), celebrate(schemas.notify), async (req, res) => {
+const middleware = {
+  put: [
+    celebrate(schemas.friendIdParam),
+    celebrate(schemas.notify),
+    auth.userId('params.id'),
+  ],
+  delete: [
+    celebrate(schemas.friendIdParam),
+    auth.userId('params.id'),
+    auth.friendId('path.friendId'),
+  ],
+  get: [
+    celebrate(schemas.idParam),
+    auth.userId('params.id'),
+  ],
+};
+
+router.put('/:friendId', ...middleware.put, async (req, res) => {
   try {
     const { friendId, id } = req.params;
     await User.update({ _id: friendId }, { $addToSet: { friends: id } });
@@ -42,7 +60,7 @@ router.put('/:friendId', celebrate(schemas.friendIdParam), celebrate(schemas.not
   }
 });
 
-router.delete('/:friendId', celebrate(schemas.friendIdParam), async (req, res) => {
+router.delete('/:friendId', ...middleware.delete, async (req, res) => {
   try {
     const { id, friendId } = req.params;
     await Promise.all([
@@ -55,7 +73,7 @@ router.delete('/:friendId', celebrate(schemas.friendIdParam), async (req, res) =
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', ...middleware.get, async (req, res) => {
   try {
     const select = '_id firstName lastName avatar locations';
     const { friends } = await User.findOne({ _id: req.params.id }, 'friends')

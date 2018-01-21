@@ -8,7 +8,7 @@ const { auth } = require('../../middleware');
 const router = express.Router();
 router.use(auth.authenticate(['basic', 'google-id-token']));
 
-router.get('/', celebrate(schemas.find), auth.adminOrUser, async (req, res) => {
+router.get('/', celebrate(schemas.find), auth.friends('query.users'), async (req, res) => {
   try {
     const query = {
       user: { $in: req.query.users },
@@ -23,7 +23,7 @@ router.get('/', celebrate(schemas.find), auth.adminOrUser, async (req, res) => {
   }
 });
 
-router.post('/', celebrate(schemas.create), auth.adminOrUser, async (req, res) => {
+router.post('/', celebrate(schemas.create), auth.userId('body.user'), async (req, res) => {
   try {
     const location = await Location.create(req.body);
     await User.update({ _id: location.user }, { $addToSet: { locations: location._id } });
@@ -33,7 +33,7 @@ router.post('/', celebrate(schemas.create), auth.adminOrUser, async (req, res) =
   }
 });
 
-router.patch('/:locationId', celebrate(schemas.update), auth.adminOrUser, async (req, res) => {
+router.patch('/:locationId', celebrate(schemas.update), auth.locationId('params.locationId'), async (req, res) => {
   try {
     await Location.update({ _id: req.params.locationId }, req.body);
     res.sendStatus(204);
@@ -42,7 +42,7 @@ router.patch('/:locationId', celebrate(schemas.update), auth.adminOrUser, async 
   }
 });
 
-router.delete('/:locationId', celebrate(schemas.remove), auth.adminOrUser, async (req, res) => {
+router.delete('/:locationId', celebrate(schemas.remove), auth.locationId('params.locationId'), async (req, res) => {
   try {
     const { locationId } = req.params;
     const { user } = await Location.findById(locationId);
@@ -56,6 +56,6 @@ router.delete('/:locationId', celebrate(schemas.remove), auth.adminOrUser, async
   }
 });
 
-router.use('/:locationId/images', celebrate(schemas.idParam), auth.adminOrUser, images);
+router.use('/:locationId/images', celebrate(schemas.idParam), auth.locationId('params.locationId'), images);
 
 module.exports = router;

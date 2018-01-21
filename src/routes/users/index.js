@@ -10,7 +10,29 @@ const { auth } = require('../../middleware');
 const router = express.Router();
 router.use(auth.authenticate(['basic', 'google-id-token']));
 
-router.get('/', celebrate(schemas.search), auth.adminOrUser, auth.query('email'), async (req, res) => {
+const middleware = {
+  getAll: [
+    celebrate(schemas.search),
+    auth.required('query', 'email'),
+  ],
+  single: [
+    celebrate(schemas.idParam),
+    auth.userId('params.id'),
+  ],
+  post: [
+    celebrate(schemas.create),
+    auth.createUser,
+  ],
+  patch: [
+    celebrate(schemas.update),
+    auth.userId('params.id'),
+  ],
+  avatar: [
+    auth.userId('params.id'),
+  ],
+};
+
+router.get('/', ...middleware.getAll, async (req, res) => {
   try {
     const rawUsers = await User.find(req.query, '_id googleId firstName lastName locations email avatar friends')
       .populate('locations', '-__v')
@@ -25,7 +47,7 @@ router.get('/', celebrate(schemas.search), auth.adminOrUser, auth.query('email')
   }
 });
 
-router.get('/:id', celebrate(schemas.idParam), auth.adminOrUser, async (req, res) => {
+router.get('/:id', ...middleware.single, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id }, '_id firstName lastName birthday avatar friends locations').populate('locations', '-__v');
     return res.status(200).send(user);
@@ -34,7 +56,7 @@ router.get('/:id', celebrate(schemas.idParam), auth.adminOrUser, async (req, res
   }
 });
 
-router.post('/', celebrate(schemas.create), auth.adminOrUserCandidate, async (req, res) => {
+router.post('/', ...middleware.post, async (req, res) => {
   try {
     const rawUser = await User.create(req.body);
     const user = _.pick(rawUser, ['_id', 'googleId', 'firstName', 'lastName']);
@@ -44,7 +66,7 @@ router.post('/', celebrate(schemas.create), auth.adminOrUserCandidate, async (re
   }
 });
 
-router.patch('/:id', celebrate(schemas.update), auth.adminOrUser, async (req, res) => {
+router.patch('/:id', ...middleware.patch, async (req, res) => {
   try {
     await User.update({ _id: req.params.id }, { $set: req.body });
     res.sendStatus(204);
@@ -53,7 +75,7 @@ router.patch('/:id', celebrate(schemas.update), auth.adminOrUser, async (req, re
   }
 });
 
-router.delete('/:id', celebrate(schemas.idParam), auth.adminOrUser, async (req, res) => {
+router.delete('/:id', ...middleware.single, async (req, res) => {
   try {
     await Promise.all([
       User.update({}, { $pull: { friends: req.params.id } }, { multi: true }),
@@ -65,7 +87,7 @@ router.delete('/:id', celebrate(schemas.idParam), auth.adminOrUser, async (req, 
   }
 });
 
-router.use('/:id/friends', celebrate(schemas.idParam), auth.adminOrUser, friends);
-router.use('/:id/avatar', celebrate(schemas.idParam), auth.adminOrUser, avatar);
+router.use('/:id/friends', friends);
+router.use('/:id/avatar', ...middleware.avatar, avatar);
 
 module.exports = router;

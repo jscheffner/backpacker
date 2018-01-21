@@ -2,6 +2,8 @@ const _ = require('lodash');
 const init = require('./init');
 const passport = require('passport');
 
+const equalsObjectId = id => doc => doc.equals(id);
+
 const adminOnly = (req, res, next) => {
   if (req.user.type === 'admin') {
     next();
@@ -10,28 +12,45 @@ const adminOnly = (req, res, next) => {
   }
 };
 
-const adminOrUser = async ({ user, params, query }, res, next) => {
-  if (user.type === 'admin') {
-    return next();
+const userId = path => (req, res, next) => {
+  const id = _.get(req, path);
+  if (req.user.type === 'admin' || req.user._id.equals(id)) {
+    next();
+  } else {
+    res.sendStatus(403);
   }
-
-  const friendsAndSelf = _.concat(user.friends, user.id);
-
-  const ownsId = !params.id || (params.id === user.id);
-  const hasFriend = !params.friendId || _.includes(user.friends, params.friendId);
-  const ownsLocation = !params.locationId || _.includes(user.locations, params.locationId);
-  const hasFriends = !query.users || (_.difference(query.users, friendsAndSelf).length === 0);
-
-  const hasPermission = ownsId && hasFriend && hasFriends && ownsLocation;
-
-  if (!hasPermission) {
-    return res.sendStatus(403);
-  }
-
-  return next();
 };
 
-const adminOrUserCandidate = ({ user, body }, res, next) => {
+const friendId = path => (req, res, next) => {
+  const id = _.get(req, path);
+  const hasFriend = _.find(req.user.friends, equalsObjectId(id));
+  if (req.user.type === 'admin' || hasFriend) {
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+};
+
+const friends = path => (req, res, next) => {
+  const users = _.get(req, path);
+  const friendsAndSelf = _.concat(req.user.friends, req.user._id);
+  const hasFriends = _.differenceWith(users, friendsAndSelf, equalsObjectId).length === 0;
+  if (req.user.type === 'admin' || hasFriends) {
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+};
+
+const required = (key, value) => (req, res, next) => {
+  if (req.user.type === 'admin' || _.has(req[key], value)) {
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+};
+
+const createUser = ({ user, body }, res, next) => {
   if (user.type === 'user') {
     return res.status(200).json(_.pick(user, ['_id', 'googleId', 'firstName', 'lastName']));
   }
@@ -45,8 +64,10 @@ const adminOrUserCandidate = ({ user, body }, res, next) => {
   return next();
 };
 
-const query = name => (req, res, next) => {
-  if (req.user.type === 'admin' || _.has(req.query, name)) {
+const locationId = path => (req, res, next) => {
+  const id = _.get(req, path);
+  const ownLocation = _.find(req.user.locations, equalsObjectId(id));
+  if (req.user.type === 'admin' || ownLocation) {
     next();
   } else {
     res.sendStatus(403);
@@ -59,8 +80,11 @@ module.exports = {
   authenticate,
   init,
   adminOnly,
-  adminOrUser,
-  adminOrUserCandidate,
-  query,
+  userId,
+  friendId,
+  locationId,
+  createUser,
+  required,
+  friends,
 };
 
