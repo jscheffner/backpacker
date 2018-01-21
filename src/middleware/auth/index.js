@@ -15,10 +15,12 @@ const adminOrUser = async ({ user, params, query }, res, next) => {
     return next();
   }
 
+  const friendsAndSelf = _.concat(user.friends, user.id);
+
   const ownsId = !params.id || (params.id === user.id);
   const hasFriend = !params.friendId || _.includes(user.friends, params.friendId);
   const ownsLocation = !params.locationId || _.includes(user.locations, params.locationId);
-  const hasFriends = !query.users || (_.difference(query.users, user.friends).length === 0);
+  const hasFriends = !query.users || (_.difference(query.users, friendsAndSelf).length === 0);
 
   const hasPermission = ownsId && hasFriend && hasFriends && ownsLocation;
 

@@ -7,9 +7,8 @@ const { auth } = require('../../middleware');
 
 const router = express.Router();
 router.use(auth.authenticate(['basic', 'google-id-token']));
-router.use(auth.adminOrUser);
 
-router.get('/', celebrate(schemas.find), async (req, res) => {
+router.get('/', celebrate(schemas.find), auth.adminOrUser, async (req, res) => {
   try {
     const query = {
       user: { $in: req.query.users },
@@ -24,7 +23,7 @@ router.get('/', celebrate(schemas.find), async (req, res) => {
   }
 });
 
-router.post('/', celebrate(schemas.create), async (req, res) => {
+router.post('/', celebrate(schemas.create), auth.adminOrUser, async (req, res) => {
   try {
     const location = await Location.create(req.body);
     await User.update({ _id: location.user }, { $addToSet: { locations: location._id } });
@@ -34,7 +33,7 @@ router.post('/', celebrate(schemas.create), async (req, res) => {
   }
 });
 
-router.patch('/:locationId', celebrate(schemas.update), async (req, res) => {
+router.patch('/:locationId', celebrate(schemas.update), auth.adminOrUser, async (req, res) => {
   try {
     await Location.update({ _id: req.params.locationId }, req.body);
     res.sendStatus(204);
@@ -43,7 +42,7 @@ router.patch('/:locationId', celebrate(schemas.update), async (req, res) => {
   }
 });
 
-router.delete('/:locationId', celebrate(schemas.remove), async (req, res) => {
+router.delete('/:locationId', celebrate(schemas.remove), auth.adminOrUser, async (req, res) => {
   try {
     const { locationId } = req.params;
     const { user } = await Location.findById(locationId);
@@ -57,6 +56,6 @@ router.delete('/:locationId', celebrate(schemas.remove), async (req, res) => {
   }
 });
 
-router.use('/:locationId/images', celebrate(schemas.idParam), images);
+router.use('/:locationId/images', celebrate(schemas.idParam), auth.adminOrUser, images);
 
 module.exports = router;
