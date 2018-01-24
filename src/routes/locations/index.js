@@ -7,6 +7,7 @@ const { auth } = require('../../middleware');
 
 const router = express.Router();
 router.use(auth.authenticate(['basic', 'google-id-token']));
+router.use(auth.allowedTypes(['admin', 'user']));
 
 router.get('/', celebrate(schemas.find), auth.friends('query.users'), async (req, res) => {
   try {

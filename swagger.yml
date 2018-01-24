@@ -10,13 +10,15 @@
   paths:
     /users:
       get:
-        description: Get all users or the users matching the criteria specified as query parameters
+        description: > 
+                       Find users by criteria specified as query parameters.
+                       Admins can omit thos criteria, users have to specify them. 
         tags:
           - user
         parameters:
           - in: query
             name: email
-            description: user email, required for anyone but admins
+            description: user email, can be omited only by admins
             schema:
               type: string
         responses:
@@ -29,7 +31,7 @@
           500:
             description: Server Error
       post:
-        description: Create user
+        description: Create user. Users can only create profiles linked to their own google account.
         tags:
           - user
         requestBody:
@@ -41,6 +43,7 @@
                 required:
                   - firstName
                   - lastName
+                  - googleId
         responses:
           200:
             description: 'The user with the googleId already exists (see response body)'
@@ -52,8 +55,8 @@
             description: 'Unauthorized: Authentication failed'
           403:
             description: >
-                           Forbidden: The google id in the request body has
-                           to match the user id the token was created for.
+                           'Forbidden: The google id in the request body has
+                           to match the user id the token was created for.'
           500:
             description: 'Server Error'
     /users/{userId}:
@@ -65,7 +68,7 @@
           schema:
             $ref: '#/components/schemas/ObjectId'
       get:
-        description: Get user
+        description: Get user. Users can only access their own profile.
         tags:
           - user
         responses:
@@ -80,7 +83,7 @@
           500:
             description: Server Error
       patch:
-        description: Update user
+        description: Update user. Users can only update their own profile.
         tags:
           - user
         requestBody:
@@ -101,7 +104,7 @@
           500:
             description: Server Error
       delete:
-        description: Delete user
+        description: Delete user. Users can only delete their own profile.
         tags:
           - user
         responses:
@@ -124,7 +127,7 @@
           schema:
             $ref: '#/components/schemas/ObjectId'
       get:
-        description: Get user's friends'
+        description: Get user's friends. Users can only access their own friends.
         tags:
           - user
         responses:
@@ -153,7 +156,10 @@
           schema:
             $ref: '#/components/schemas/ObjectId'
       put:
-        description: Add friend
+        description: > 
+                       Add friend. This will share the user's locations with the added friend.
+                       The friend does not automatically share their locations with the user.
+                       Users can only share their own locations. 
         tags:
           - user
         responses:
@@ -168,7 +174,7 @@
           500:
             description: Server Error
       delete:
-        description: Remove friend
+        description: Remove friend.
         tags:
           - user
         responses:
@@ -282,7 +288,7 @@
           401:
             description: 'Unauthorized: Authentication failed'
           403:
-            description: Forbidden: Users can only create locations for themselves
+            description: 'Forbidden: Users can only create locations for themselves'
           500:
             description: Server Error
               

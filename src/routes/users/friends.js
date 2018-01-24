@@ -6,6 +6,7 @@ const firebase = require('firebase-admin');
 const { auth } = require('../../middleware');
 
 const router = express.Router({ mergeParams: true });
+router.use(auth.allowedTypes(['admin', 'user']));
 
 async function notify(userId, friendId) {
   const { deviceToken } = await User.findById(friendId, 'deviceToken');
@@ -83,5 +84,6 @@ router.get('/', ...middleware.get, async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 
 module.exports = router;

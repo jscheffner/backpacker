@@ -13,21 +13,31 @@ router.use(auth.authenticate(['basic', 'google-id-token']));
 const middleware = {
   getAll: [
     celebrate(schemas.search),
+    auth.allowedTypes(['admin', 'user']),
     auth.required('query', 'email'),
   ],
-  single: [
+  delete: [
     celebrate(schemas.idParam),
+    auth.allowedTypes(['admin', 'user']),
     auth.userId('params.id'),
+  ],
+  get: [
+    celebrate(schemas.idParam),
+    auth.allowedTypes(['admin', 'user']),
+    auth.friendId('params.id'),
   ],
   post: [
     celebrate(schemas.create),
+    auth.allowedTypes(['admin', 'user', 'user_candidate']),
     auth.createUser,
   ],
   patch: [
     celebrate(schemas.update),
+    auth.allowedTypes(['admin', 'user']),
     auth.userId('params.id'),
   ],
   avatar: [
+    auth.allowedTypes(['admin', 'user']),
     auth.userId('params.id'),
   ],
 };
@@ -47,7 +57,7 @@ router.get('/', ...middleware.getAll, async (req, res) => {
   }
 });
 
-router.get('/:id', ...middleware.single, async (req, res) => {
+router.get('/:id', ...middleware.get, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id }, '_id firstName lastName birthday avatar friends locations').populate('locations', '-__v');
     return res.status(200).send(user);
@@ -75,7 +85,7 @@ router.patch('/:id', ...middleware.patch, async (req, res) => {
   }
 });
 
-router.delete('/:id', ...middleware.single, async (req, res) => {
+router.delete('/:id', ...middleware.delete, async (req, res) => {
   try {
     await Promise.all([
       User.update({}, { $pull: { friends: req.params.id } }, { multi: true }),

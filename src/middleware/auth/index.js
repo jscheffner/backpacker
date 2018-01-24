@@ -4,8 +4,8 @@ const passport = require('passport');
 
 const equalsObjectId = id => doc => doc.equals(id);
 
-const adminOnly = (req, res, next) => {
-  if (req.user.type === 'admin') {
+const allowedTypes = types => (req, res, next) => {
+  if (_.includes(types, req.user.type)) {
     next();
   } else {
     res.sendStatus(403);
@@ -14,7 +14,8 @@ const adminOnly = (req, res, next) => {
 
 const userId = path => (req, res, next) => {
   const id = _.get(req, path);
-  if (req.user.type === 'admin' || req.user._id.equals(id)) {
+  const { user } = req;
+  if (user.type === 'admin' || (user.type === 'user' && req.user._id.equals(id))) {
     next();
   } else {
     res.sendStatus(403);
@@ -23,8 +24,10 @@ const userId = path => (req, res, next) => {
 
 const friendId = path => (req, res, next) => {
   const id = _.get(req, path);
-  const hasFriend = _.find(req.user.friends, equalsObjectId(id));
-  if (req.user.type === 'admin' || hasFriend) {
+  const { user } = req;
+  const friendsAndSelf = _.concat(user.friends, user._id);
+  const hasFriend = _.find(friendsAndSelf, equalsObjectId(id));
+  if (user.type === 'admin' || hasFriend) {
     next();
   } else {
     res.sendStatus(403);
@@ -33,9 +36,10 @@ const friendId = path => (req, res, next) => {
 
 const friends = path => (req, res, next) => {
   const users = _.get(req, path);
-  const friendsAndSelf = _.concat(req.user.friends, req.user._id);
+  const { user } = req;
+  const friendsAndSelf = _.concat(user.friends, user._id);
   const hasFriends = _.differenceWith(users, friendsAndSelf, equalsObjectId).length === 0;
-  if (req.user.type === 'admin' || hasFriends) {
+  if (user.type === 'admin' || hasFriends) {
     next();
   } else {
     res.sendStatus(403);
@@ -43,7 +47,8 @@ const friends = path => (req, res, next) => {
 };
 
 const required = (key, value) => (req, res, next) => {
-  if (req.user.type === 'admin' || _.has(req[key], value)) {
+  const { user } = req;
+  if (user.type === 'admin' || _.has(req[key], value)) {
     next();
   } else {
     res.sendStatus(403);
@@ -66,8 +71,9 @@ const createUser = ({ user, body }, res, next) => {
 
 const locationId = path => (req, res, next) => {
   const id = _.get(req, path);
-  const ownLocation = _.find(req.user.locations, equalsObjectId(id));
-  if (req.user.type === 'admin' || ownLocation) {
+  const { user } = req;
+  const ownLocation = _.find(user.locations, equalsObjectId(id));
+  if (user.type === 'admin' || ownLocation) {
     next();
   } else {
     res.sendStatus(403);
@@ -79,7 +85,7 @@ const authenticate = strategy => passport.authenticate(strategy, { session: fals
 module.exports = {
   authenticate,
   init,
-  adminOnly,
+  allowedTypes,
   userId,
   friendId,
   locationId,
