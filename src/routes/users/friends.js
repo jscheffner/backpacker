@@ -40,7 +40,6 @@ const middleware = {
   delete: [
     celebrate(schemas.friendIdParam),
     auth.userId('params.id'),
-    auth.friendId('path.friendId'),
   ],
   get: [
     celebrate(schemas.idParam),

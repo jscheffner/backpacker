@@ -15,7 +15,7 @@ const allowedTypes = types => (req, res, next) => {
 const userId = path => (req, res, next) => {
   const id = _.get(req, path);
   const { user } = req;
-  if (user.type === 'admin' || (user.type === 'user' && req.user._id.equals(id))) {
+  if (user.type === 'admin' || user._id.equals(id)) {
     next();
   } else {
     res.sendStatus(403);
