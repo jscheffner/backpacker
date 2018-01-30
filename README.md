@@ -11,6 +11,8 @@ Before running this service you need to install:
 - NPM
 - MongoDB
 
+Also, you need to generate [Google OAuth2 credentials](https://console.developers.google.com) and add your client id to the configuration file. Furthermore, in order for the backend being able to send notifications to devices, you need to set up a [firebase](https://firebase.google.com/) project and add its credentials and URL to the configuration file.
+
 ### Installation
 
 1. Clone this repository with `git clone git@github.com:jscheffner/backpacker-backend.git`
