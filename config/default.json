@@ -13,7 +13,7 @@
     "format": "dev"
   },
   "firebase": {
-    "url": "https://backpacker-app-1512139294560.firebaseio.com",
+    "url": "PUT YOUR FIREBASE URL HERE",
     "credentials": {}
   }
 }
