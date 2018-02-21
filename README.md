@@ -15,7 +15,7 @@ Also, you need to generate [Google OAuth2 credentials](https://console.developer
 
 ### Installation
 
-1. Clone this repository with `git clone git@github.com:jscheffner/backpacker-backend.git`
+1. Clone this repository
 2. Run `npm install` inside the newly created directory
 
 ### Run
